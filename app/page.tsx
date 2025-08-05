@@ -128,7 +128,7 @@ export default function NexaChatbot() {
         </Card>
 
         {/* Chat Interface */}
-        <Card className="h-[600px] flex flex-col">
+        <Card className="h-[500px] flex flex-col">
           <CardHeader className="flex-shrink-0">
             <CardTitle className="text-lg text-gray-700">Chat with TINKO</CardTitle>
           </CardHeader>
