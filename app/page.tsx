@@ -92,7 +92,7 @@ export default function NexaChatbot() {
         id: (Date.now() + 1).toString(),
         content:
           error.message.includes("API key expired") || error.message.includes("API key not valid")
-            ? "API key expired/invalid ho gaya hai! Please developer ko bolke naya key set karwao. 😊"
+            ? "API key expired ho gaya hai! Please developer ko bolke naya key set karwao. 😊"
             : "Sorry, connection problem hai! Phir se try karo! 😊",
         sender: "bot",
         timestamp: new Date(),
@@ -114,14 +114,14 @@ export default function NexaChatbot() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
+        {/* Header - Updated name to TINKO */}
         <Card className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold flex items-center justify-center gap-3">
               <Bot className="w-8 h-8" />
               TINKO
             </CardTitle>
-            <p className="text-blue-100">Your Friendly AI Assistant</p>
+            <p className="text-blue-100">Your Smart Companion from the Tinkering Lab</p>
             <p className="text-sm text-blue-200">Developed by Kartik | Atal Adarsh Vidyalaya Atal Tinkering Lab</p>
           </CardHeader>
         </Card>
@@ -129,7 +129,7 @@ export default function NexaChatbot() {
         {/* Chat Interface */}
         <Card className="h-[600px] flex flex-col">
           <CardHeader className="flex-shrink-0">
-            <CardTitle className="text-lg text-gray-700">Chat with Tinko</CardTitle>
+            <CardTitle className="text-lg text-gray-700">Chat with TINKO</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col p-0 min-h-0">
             {/* Messages - Changed from ScrollArea to a simple div with overflow-y-auto */}
