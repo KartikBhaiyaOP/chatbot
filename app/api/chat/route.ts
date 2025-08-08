@@ -69,8 +69,6 @@ TINKO:`
       }
 
       const lowerMessage = message.toLowerCase()
-      
-      // Simple Hindi detection (agar message me Devanagari script ya kuch common Hindi words hai)
       const isHindi = /[\u0900-\u097F]|namaste|kaise|kya|tum|aap/.test(lowerMessage)
       
       let fallbackResponse = isHindi 
@@ -97,6 +95,7 @@ TINKO:`
       
       console.log(`🔄 Using fallback: "${fallbackResponse}"`)
       return NextResponse.json({ response: fallbackResponse })
+    } // <-- yeh missing tha
   } catch (error: any) {
     console.error("💥 Critical Error:", error.message)
     console.error("Full error:", error)
