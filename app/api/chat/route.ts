@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
     const { message, chatHistory } = await request.json()
     console.log(`📝 Received message: "${message}"`)
 
-    // Strictly use the API key from environment variables
     const apiKey = process.env.GEMINI_API_KEY
 
     if (!apiKey) {
@@ -19,20 +18,19 @@ export async function POST(request: NextRequest) {
 
     console.log("🔑 Using API key (first 10 chars):", apiKey.substring(0, 10) + "...")
 
-    // Initialize Gemini AI
     const genAI = new GoogleGenerativeAI(apiKey)
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
       generationConfig: {
-        maxOutputTokens: 100,
+        // Increased maxOutputTokens to allow for longer responses
+        maxOutputTokens: 500, // Increased from 100
         temperature: 0.7,
       },
     })
 
     console.log("🤖 Model initialized successfully")
 
-    // Updated prompt: Nexa will ONLY speak English and ask users to speak English if they use another language.
-    const prompt = `You are Nexa, a friendly AI assistant for students. You ONLY speak English. If the user speaks in any other language, politely ask them to please speak in English. Keep your responses very short (1-2 sentences only).
+    const prompt = `You are Nexa, a friendly AI assistant for students. You ONLY speak English. If the user speaks in any other language, politely ask them to please speak in English. Keep your responses concise and to the point.
 
 Student: ${message}
 Nexa:`
@@ -40,7 +38,6 @@ Nexa:`
     console.log("📤 Sending to Gemini API...")
 
     try {
-      // Simple generation without timeout complexity
       const result = await model.generateContent(prompt)
       console.log("✅ Got response from Gemini")
 
@@ -49,14 +46,8 @@ Nexa:`
 
       console.log(`🤖 Raw response: "${reply}"`)
 
-      // Simple cleanup (removing non-English characters if any slip through)
+      // Removed the explicit 30-word truncation
       reply = reply.replace(/[^\w\s.,!?]/g, "").trim()
-
-      // Limit to 30 words
-      const words = reply.split(" ")
-      if (words.length > 30) {
-        reply = words.slice(0, 30).join(" ") + "..."
-      }
 
       console.log(`📤 Final response: "${reply}"`)
 
@@ -65,16 +56,14 @@ Nexa:`
       console.error("❌ Gemini API Error:", apiError.message)
       console.error("Error details:", apiError)
 
-      // Check if it's an API key error specifically
       if (apiError.message?.includes("API key expired") || apiError.message?.includes("API_KEY_INVALID")) {
         return NextResponse.json({
           response: "API key expired ho gaya hai! Please developer ko bolke naya key set karwao. 😊",
         })
       }
 
-      // Smart fallback based on message content
       const lowerMessage = message.toLowerCase()
-      let fallbackResponse = "I am Nexa! How can I help you?" // Fallback in English
+      let fallbackResponse = "I am Nexa! How can I help you?"
 
       if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
         fallbackResponse = "Hello! I am Nexa, your AI friend. How are you?"
@@ -94,7 +83,7 @@ Nexa:`
     console.error("Full error:", error)
 
     return NextResponse.json({
-      response: "I am a bit confused! Please try again! 😊", // Critical error fallback in English
+      response: "I am a bit confused! Please try again! 😊",
     })
   }
 }
