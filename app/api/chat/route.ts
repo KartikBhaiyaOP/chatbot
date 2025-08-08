@@ -69,21 +69,34 @@ TINKO:`
       }
 
       const lowerMessage = message.toLowerCase()
-      let fallbackResponse = "I am Tinko! How can I help you?"
-
-      if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
-        fallbackResponse = "Hello! I am Tinko, your AI friend. How are you?"
-      } else if (lowerMessage.includes("name")) {
-        fallbackResponse = "My name is Tinko! Kartik created me."
-      } else if (lowerMessage.includes("what")) {
-        fallbackResponse = "I help students. You can ask me anything!"
-      } else if (lowerMessage.includes("how")) {
-        fallbackResponse = "Tell me what you want to know? I will help you!"
+      
+      // Simple Hindi detection (agar message me Devanagari script ya kuch common Hindi words hai)
+      const isHindi = /[\u0900-\u097F]|namaste|kaise|kya|tum|aap/.test(lowerMessage)
+      
+      let fallbackResponse = isHindi 
+        ? "Main TINKO hoon! Main aapki kaise madad kar sakta hoon?" 
+        : "I am TINKO! How can I help you?"
+      
+      if (lowerMessage.includes("hello") || lowerMessage.includes("hi") || lowerMessage.includes("namaste")) {
+        fallbackResponse = isHindi 
+          ? "Namaste! Main TINKO hoon, aapka AI dost. Aap kaise ho?" 
+          : "Hello! I am TINKO, your AI friend. How are you?"
+      } else if (lowerMessage.includes("name") || lowerMessage.includes("naam")) {
+        fallbackResponse = isHindi 
+          ? "Mera naam TINKO hai! Kartik ne mujhe banaya hai." 
+          : "My name is TINKO! Kartik created me."
+      } else if (lowerMessage.includes("what") || lowerMessage.includes("kya")) {
+        fallbackResponse = isHindi 
+          ? "Main students ki madad karta hoon. Aap mujhse kuch bhi pooch sakte ho!" 
+          : "I help students. You can ask me anything!"
+      } else if (lowerMessage.includes("how") || lowerMessage.includes("kaise")) {
+        fallbackResponse = isHindi 
+          ? "Bataiye aap kya jaana chahte ho? Main aapki madad karunga!" 
+          : "Tell me what you want to know? I will help you!"
       }
-
+      
       console.log(`🔄 Using fallback: "${fallbackResponse}"`)
       return NextResponse.json({ response: fallbackResponse })
-    }
   } catch (error: any) {
     console.error("💥 Critical Error:", error.message)
     console.error("Full error:", error)
