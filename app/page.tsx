@@ -6,8 +6,8 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, Bot, User } from "lucide-react"
+// Removed ScrollArea import as we'll use a simple div for scrolling
+import { Send, Bot, User } from 'lucide-react'
 
 interface Message {
   id: string
@@ -21,19 +21,19 @@ export default function NexaChatbot() {
     {
       id: "1",
       content:
-        "Hello! I'm TINKO, your friendly AI assistant created by Kartik for Atal Adarsh Vidyalaya Atal Tinkering Lab. How can I help you today?",
+        "Hello! I'm Nexa, your friendly AI assistant created by Kartik for Atal Adarsh Vidyalaya Atal Tinkering Lab. How can I help you today?",
       sender: "bot",
       timestamp: new Date(),
     },
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const scrollAreaRef = useRef<HTMLDivElement>(null)
+  // Changed scrollAreaRef to messagesEndRef for a simpler div
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Auto-scroll to bottom when messages change
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
   const sendMessage = async () => {
@@ -68,7 +68,6 @@ export default function NexaChatbot() {
       console.log("📡 API Response status:", response.status)
 
       if (!response.ok) {
-        // If response is not OK, throw an error to be caught by the catch block
         const errorData = await response.json()
         throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.response || "Unknown error"}`)
       }
@@ -120,69 +119,69 @@ export default function NexaChatbot() {
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold flex items-center justify-center gap-3">
               <Bot className="w-8 h-8" />
-              TINKO
+              NEXA
             </CardTitle>
-            <p className="text-blue-100">Your Smart Companion from the Tinkering Lab</p>
+            <p className="text-blue-100">Your Humorous AI Assistant</p>
             <p className="text-sm text-blue-200">Developed by Kartik | Atal Adarsh Vidyalaya Atal Tinkering Lab</p>
           </CardHeader>
         </Card>
 
         {/* Chat Interface */}
-        <Card className="h-[500px] flex flex-col">
+        <Card className="h-[600px] flex flex-col">
           <CardHeader className="flex-shrink-0">
-            <CardTitle className="text-lg text-gray-700">Chat with TINKO</CardTitle>
+            <CardTitle className="text-lg text-gray-700">Chat with Nexa</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col p-0 min-h-0">
-            {/* Messages */}
-            <div className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
-                <div className="space-y-4">
-                  {messages.map((message) => (
+            {/* Messages - Changed from ScrollArea to a simple div with overflow-y-auto */}
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="space-y-4">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex items-start gap-3 ${message.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
+                  >
                     <div
-                      key={message.id}
-                      className={`flex items-start gap-3 ${message.sender === "user" ? "flex-row-reverse" : "flex-row"}`}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        message.sender === "user" ? "bg-blue-500 text-white" : "bg-green-500 text-white"
+                      }`}
                     >
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          message.sender === "user" ? "bg-blue-500 text-white" : "bg-green-500 text-white"
-                        }`}
-                      >
-                        {message.sender === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
-                      </div>
-                      <div
-                        className={`max-w-[70%] rounded-lg p-3 ${
-                          message.sender === "user" ? "bg-blue-500 text-white ml-auto" : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        <p className="text-sm">{message.content}</p>
-                        <p className={`text-xs mt-1 ${message.sender === "user" ? "text-blue-100" : "text-gray-500"}`}>
-                          {message.timestamp.toLocaleTimeString()}
-                        </p>
+                      {message.sender === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                    </div>
+                    <div
+                      className={`max-w-[70%] rounded-lg p-3 ${
+                        message.sender === "user" ? "bg-blue-500 text-white ml-auto" : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      <p className="text-sm">{message.content}</p>
+                      <p className={`text-xs mt-1 ${message.sender === "user" ? "text-blue-100" : "text-gray-500"}`}>
+                        {message.timestamp.toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+                      <Bot className="w-4 h-4" />
+                    </div>
+                    <div className="bg-gray-100 rounded-lg p-3">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
                       </div>
                     </div>
-                  ))}
-                  {isLoading && (
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
-                        <Bot className="w-4 h-4" />
-                      </div>
-                      <div className="bg-gray-100 rounded-lg p-3">
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div
-                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                            style={{ animationDelay: "0.1s" }}
-                          ></div>
-                          <div
-                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                            style={{ animationDelay: "0.2s" }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
+                  </div>
+                )}
+                {/* This div will be scrolled into view to ensure the latest message is visible */}
+                <div ref={messagesEndRef} />
+              </div>
             </div>
 
             {/* Input - Fixed at bottom */}
