@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
 
     console.log("🤖 Model initialized successfully")
 
-    // Very simple prompt
-    const prompt = `You are Nexa, a friendly AI assistant for students. Reply in simple Hindi-English mix. Keep it very short (1-2 sentences only).
+    // Updated prompt: Nexa will ONLY speak English and ask users to speak English if they use another language.
+    const prompt = `You are Nexa, a friendly AI assistant for students. You ONLY speak English. If the user speaks in any other language, politely ask them to please speak in English. Keep your responses very short (1-2 sentences only).
 
 Student: ${message}
 Nexa:`
@@ -49,8 +49,8 @@ Nexa:`
 
       console.log(`🤖 Raw response: "${reply}"`)
 
-      // Simple cleanup
-      reply = reply.replace(/[^\w\s\u0900-\u097F.,!?]/g, "").trim()
+      // Simple cleanup (removing non-English characters if any slip through)
+      reply = reply.replace(/[^\w\s.,!?]/g, "").trim()
 
       // Limit to 30 words
       const words = reply.split(" ")
@@ -74,16 +74,16 @@ Nexa:`
 
       // Smart fallback based on message content
       const lowerMessage = message.toLowerCase()
-      let fallbackResponse = "Main Nexa hun! Kya help chahiye?"
+      let fallbackResponse = "I am Nexa! How can I help you?" // Fallback in English
 
       if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
-        fallbackResponse = "Hello! Main Nexa hun, aapka AI friend. Kaise ho?"
+        fallbackResponse = "Hello! I am Nexa, your AI friend. How are you?"
       } else if (lowerMessage.includes("name")) {
-        fallbackResponse = "Mera naam Nexa hai! Kartik ne banaya hai mujhe."
+        fallbackResponse = "My name is Nexa! Kartik created me."
       } else if (lowerMessage.includes("what")) {
-        fallbackResponse = "Main students ki help karta hun. Kuch bhi puch sakte ho!"
+        fallbackResponse = "I help students. You can ask me anything!"
       } else if (lowerMessage.includes("how")) {
-        fallbackResponse = "Batao kya janna chahte ho? Main help karunga!"
+        fallbackResponse = "Tell me what you want to know? I will help you!"
       }
 
       console.log(`🔄 Using fallback: "${fallbackResponse}"`)
@@ -94,7 +94,7 @@ Nexa:`
     console.error("Full error:", error)
 
     return NextResponse.json({
-      response: "Main thoda confused hun! Phir se try karo please! 😊",
+      response: "I am a bit confused! Please try again! 😊", // Critical error fallback in English
     })
   }
 }
