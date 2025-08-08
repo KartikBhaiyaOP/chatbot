@@ -21,7 +21,7 @@ export default function NexaChatbot() {
     {
       id: "1",
       content:
-        "Hello! I'm Nexa, your friendly AI assistant created by Kartik for Atal Adarsh Vidyalaya Atal Tinkering Lab. How can I help you today?",
+        "Hello! I'm TINKO, your friendly AI assistant created by Kartik for Atal Adarsh Vidyalaya Atal Tinkering Lab. How can I help you today?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -119,9 +119,9 @@ export default function NexaChatbot() {
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold flex items-center justify-center gap-3">
               <Bot className="w-8 h-8" />
-              NEXA
+              TINKO
             </CardTitle>
-            <p className="text-blue-100">Your Humorous AI Assistant</p>
+            <p className="text-blue-100">Your Friendly AI Assistant</p>
             <p className="text-sm text-blue-200">Developed by Kartik | Atal Adarsh Vidyalaya Atal Tinkering Lab</p>
           </CardHeader>
         </Card>
@@ -129,7 +129,7 @@ export default function NexaChatbot() {
         {/* Chat Interface */}
         <Card className="h-[600px] flex flex-col">
           <CardHeader className="flex-shrink-0">
-            <CardTitle className="text-lg text-gray-700">Chat with Nexa</CardTitle>
+            <CardTitle className="text-lg text-gray-700">Chat with Tinko</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col p-0 min-h-0">
             {/* Messages - Changed from ScrollArea to a simple div with overflow-y-auto */}
