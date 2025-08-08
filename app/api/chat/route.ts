@@ -30,10 +30,16 @@ export async function POST(request: NextRequest) {
 
     console.log("🤖 Model initialized successfully")
 
-    const prompt = `You are Nexa, a friendly AI assistant for students. You ONLY speak English. If the user speaks in any other language, politely ask them to please speak in English. Keep your responses concise and to the point.
+    const prompt = `You are TINKO, a friendly AI assistant for students. 
+Always detect the language of the user's message first.
+- If the user speaks in Hindi, respond fully in Hindi.
+- If the user speaks in English, respond fully in English.
+- Do not mix languages unless the user mixes them.
+- Match the tone of the user: friendly, concise, and helpful.
+- Keep responses short and clear.
 
 Student: ${message}
-Nexa:`
+TINKO:`
 
     console.log("📤 Sending to Gemini API...")
 
@@ -63,12 +69,12 @@ Nexa:`
       }
 
       const lowerMessage = message.toLowerCase()
-      let fallbackResponse = "I am Nexa! How can I help you?"
+      let fallbackResponse = "I am Tinko! How can I help you?"
 
       if (lowerMessage.includes("hello") || lowerMessage.includes("hi")) {
-        fallbackResponse = "Hello! I am Nexa, your AI friend. How are you?"
+        fallbackResponse = "Hello! I am Tinko, your AI friend. How are you?"
       } else if (lowerMessage.includes("name")) {
-        fallbackResponse = "My name is Nexa! Kartik created me."
+        fallbackResponse = "My name is Tinko! Kartik created me."
       } else if (lowerMessage.includes("what")) {
         fallbackResponse = "I help students. You can ask me anything!"
       } else if (lowerMessage.includes("how")) {
