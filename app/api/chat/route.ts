@@ -47,7 +47,7 @@ TINKO:`
       console.log("✅ Got response from Gemini")
 
       const response = result.response
-      const reply = response.text().trim()
+      let reply = response.text().trim()
 
       console.log(`🤖 Raw response: "${reply}"`)
 
