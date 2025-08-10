@@ -6,8 +6,9 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// Removed ScrollArea import as we'll use a simple div for scrolling
-import { Send, Bot, User } from 'lucide-react'
+import { Send, Bot, User } from "lucide-react"
+import ReactMarkdown from "react-markdown" // Import ReactMarkdown
+import remarkGfm from "remark-gfm" // Import remarkGfm for GitHub Flavored Markdown
 
 interface Message {
   id: string
@@ -28,10 +29,8 @@ export default function NexaChatbot() {
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  // Changed scrollAreaRef to messagesEndRef for a simpler div
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
@@ -61,7 +60,7 @@ export default function NexaChatbot() {
         },
         body: JSON.stringify({
           message: currentInput,
-          chatHistory: messages.slice(-5), // Only last 5 messages
+          chatHistory: messages.slice(-10), // Changed from -5 to -10 for better memory
         }),
       })
 
@@ -152,7 +151,10 @@ export default function NexaChatbot() {
                         message.sender === "user" ? "bg-blue-500 text-white ml-auto" : "bg-gray-100 text-gray-800"
                       }`}
                     >
-                      <p className="text-sm">{message.content}</p>
+                      {/* Use ReactMarkdown to render the content */}
+                      <ReactMarkdown className="text-sm" remarkPlugins={[remarkGfm]}>
+                        {message.content}
+                      </ReactMarkdown>
                       <p className={`text-xs mt-1 ${message.sender === "user" ? "text-blue-100" : "text-gray-500"}`}>
                         {message.timestamp.toLocaleTimeString()}
                       </p>
