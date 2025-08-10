@@ -60,7 +60,7 @@ export default function NexaChatbot() {
         },
         body: JSON.stringify({
           message: currentInput,
-          chatHistory: messages.slice(-10), // Changed from -5 to -10 for better memory
+          chatHistory: messages.slice(-10), // Increased memory to last 10 messages
         }),
       })
 
